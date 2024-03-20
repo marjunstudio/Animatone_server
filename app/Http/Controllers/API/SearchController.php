@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Services\YouTubeService;
 
 
 class SearchController extends Controller
@@ -30,16 +30,11 @@ class SearchController extends Controller
         return response()->json($categories);
     }
 
-    public function search(Request $request)
+    public function searchVideos(Request $request, YouTubeService $youTubeService)
     {
-        $searchParams = $request->all();
-        Log::info('Search params:', $searchParams);
-        
-        // ここに検索処理を実装
+        $query = $request->input('query');
+        $videos = $youTubeService->searchVideos($query);
 
-        return response()->json([
-            'message' => 'Search request received.',
-            'params' => $searchParams,
-        ]);
+        return response()->json($videos);
     }
 }
