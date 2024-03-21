@@ -22,4 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/composers', [SearchController::class, 'getComposers']);
 Route::get('/categories', [SearchController::class, 'getCategories']);
-Route::post('/search', [SearchController::class, 'search']);
+Route::post('/search', [SearchController::class, 'searchVideos']);
