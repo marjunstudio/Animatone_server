@@ -1,33 +1,37 @@
 <?php
-
 namespace App\Services;
 
-use GuzzleHttp\Client;
+use Google_Client;
+use Google_Service_YouTube;
 
 class YouTubeService
 {
-    private $apiKey;
+	protected $client;
 
-    public function __construct()
-    {
-        $this->apiKey = config('services.youtube.api_key');
-    }
+	public function __construct()
+	{
+		$this->client = new Google_Client();
+		$this->client->setDeveloperKey(config('services.youtube.api_key'));
+	}
 
-    public function searchVideos($query)
-    {
-        $client = new Client();
-        $url = "https://www.googleapis.com/youtube/v3/search";
+	public function getVideoData($id)
+	{
+		$youtube = new Google_Service_YouTube($this->client);
+		try {
+			$videoResponse = $youtube->videos->listVideos('snippet', ['id' => $id]);
 
-        $params = [
-            'key' => $this->apiKey,
-            'q' => $query,
-            'type' => 'video',
-            'part' => 'id,snippet',
-            'maxResults' => 1,
-        ];
+			$item = $videoResponse->items[0];
 
-        $response = $client->get($url, ['query' => $params]);
+			return array(
+				'title' => $item["snippet"]["title"],
+				'channel' => $item["snippet"]["channelTitle"]
+			);
 
-        return json_decode($response->getBody(), true);
-    }
+		} catch (\Exception $e) {
+			return array(
+				'title' => 'データが取得できませんでした',
+				'channel' => 'データが取得できませんでした'
+			);
+		}
+	}
 }

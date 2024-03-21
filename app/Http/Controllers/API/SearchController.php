@@ -4,8 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\YouTubeService;
+use Illuminate\Support\Facades\Http;
 
+// use App\Services\YouTubeService;
 
 class SearchController extends Controller
 {
@@ -30,11 +31,36 @@ class SearchController extends Controller
         return response()->json($categories);
     }
 
-    public function searchVideos(Request $request, YouTubeService $youTubeService)
-    {
-        $query = $request->input('query');
-        $videos = $youTubeService->searchVideos($query);
+    private $apiKey;
 
-        return response()->json($videos);
+    public function __construct()
+    {
+        $this->apiKey = config('services.youtube.api_key');
+    }
+
+    public function searchVideos(Request $request)
+    {
+        $query = $request->input('q');
+        $type = $request->input('type', 'video');
+        $maxResults = $request->input('maxResults', 1);
+
+        $url = "https://www.googleapis.com/youtube/v3/search";
+
+        $params = [
+            'key' => $this->apiKey,
+            'q' => $query,
+            'type' => $type,
+            'part' => 'id,snippet',
+            'maxResults' => $maxResults,
+        ];
+
+        $response = Http::get($url, $params);
+
+        if ($response->successful()) {
+            $searchResults = $response->json();
+            return response()->json($searchResults);
+        } else {
+            return response()->json(['error' => 'Failed to fetch search results'], $response->status());
+        }
     }
 }
