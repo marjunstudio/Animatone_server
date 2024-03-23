@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Models\Composer;
 
 // use App\Services\YouTubeService;
 
@@ -12,12 +13,7 @@ class SearchController extends Controller
 {
     public function getComposers()
     {
-        $composers = [
-            'composer1' => '作曲者1',
-            'composer2' => '作曲者2',
-            'composer3' => '作曲者3',
-            'composer4' => '作曲者4',
-        ];
+        $composers = Composer::pluck('name')->toArray();
         return response()->json($composers);
     }
 
