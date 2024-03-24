@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/music-lists', [SearchController::class, 'getMusics']);
 Route::get('/composers', [SearchController::class, 'getComposers']);
 Route::get('/categories', [SearchController::class, 'getCategories']);
 Route::post('/search', [SearchController::class, 'searchVideos']);

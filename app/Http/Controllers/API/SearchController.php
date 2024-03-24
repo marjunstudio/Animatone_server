@@ -6,11 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Composer;
+use App\Models\Music;
 
 // use App\Services\YouTubeService;
 
 class SearchController extends Controller
 {
+    public function getMusics()
+    {
+        $musics = Music::with('composer')->get();
+        return response()->json($musics);
+    }
     public function getComposers()
     {
         $composers = Composer::pluck('name')->toArray();
