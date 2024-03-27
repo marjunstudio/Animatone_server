@@ -19,7 +19,7 @@ class SearchController extends Controller
     }
     public function getComposers()
     {
-        $composers = Composer::pluck('name')->toArray();
+        $composers = Composer::select('id', 'name')->get();
         return response()->json($composers);
     }
 
@@ -40,7 +40,7 @@ class SearchController extends Controller
         $this->apiKey = config('services.youtube.api_key');
     }
 
-    public function searchVideos(Request $request)
+    public function fetchVideos(Request $request)
     {
         $query = $request->input('q');
         $type = $request->input('type', 'video');
@@ -52,7 +52,7 @@ class SearchController extends Controller
             'key' => $this->apiKey,
             'q' => $query,
             'type' => $type,
-            'part' => 'id,snippet',
+            'part' => 'id, snippet',
             'maxResults' => $maxResults,
         ];
 
