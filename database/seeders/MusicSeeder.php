@@ -32,11 +32,6 @@ class MusicSeeder extends Seeder
                 'composer_id' => 2,
             ],
             [
-                'title' => '三つのジャポニスム',
-                'description' => '',
-                'composer_id' => 1,
-            ],
-            [
                 'title' => '大いなる約束の大地〜チンギス・ハーン',
                 'description' => '',
                 'composer_id' => 3,

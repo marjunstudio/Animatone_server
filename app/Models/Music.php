@@ -8,7 +8,7 @@ class Music extends Model
 {
     protected $table = 'musics';
     
-    protected $fillable = ['title', 'description', 'composer_id'];
+    protected $guarded = ['id'];
 
     public function composer()
     {
