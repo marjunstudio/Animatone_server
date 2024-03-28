@@ -8,7 +8,7 @@ class Composer extends Model
 {
     protected $table = 'composers';
 
-    protected $fillable = ['name', 'furigana'];
+    protected $guarded = ['id'];
 
     public function musics()
     {
